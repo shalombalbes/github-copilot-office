@@ -88,26 +88,41 @@ const useStyles = makeStyles({
     fontWeight: "300",
   },
   inputContainer: {
-    padding: "16px",
+    margin: "16px",
+    padding: "4px",
     display: "flex",
-    gap: "8px",
+    flexDirection: "column",
+    gap: "2px",
+    borderRadius: "6px",
+  },
+  inputContainerLight: {
+    backgroundColor: "white",
+    border: "1px solid #d1d1d1",
+  },
+  inputContainerDark: {
+    backgroundColor: "#252423",
+    border: "1px solid #3b3a39",
   },
   input: {
     flex: 1,
-    padding: "12px 4px",
-    borderRadius: "6px",
-  },
-  inputLight: {
-    backgroundColor: "white",
-  },
-  inputDark: {
-    backgroundColor: "#252423",
+    padding: 0,
+    borderRadius: "0",
+    border: "none !important",
+    backgroundColor: "transparent",
+    outline: "none !important",
+    boxShadow: "none !important",
+    "::after": {
+      display: "none !important",
+    },
   },
   sendButton: {
     width: "40px",
     height: "40px",
     minWidth: "40px",
     padding: "0",
+    alignSelf: "flex-end",
+    backgroundColor: "transparent",
+    border: "none",
   },
   messageUser: {
     alignSelf: "flex-end",
@@ -251,10 +266,10 @@ export const App: React.FC = () => {
           <div ref={chatEndRef} />
         </div>
 
-        <div className={styles.inputContainer}>
+        <div className={`${styles.inputContainer} ${isDarkMode ? styles.inputContainerDark : styles.inputContainerLight}`}>
           <Textarea
             ref={inputRef}
-            className={`${styles.input} ${isDarkMode ? styles.inputDark : styles.inputLight}`}
+            className={styles.input}
             value={inputValue}
             onChange={(e, data) => setInputValue(data.value)}
             onKeyDown={handleKeyPress}
