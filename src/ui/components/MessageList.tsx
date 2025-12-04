@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useRef, useEffect, useState } from "react";
 import { makeStyles } from "@fluentui/react-components";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export interface Message {
   id: string;
@@ -22,7 +24,7 @@ const useStyles = makeStyles({
     padding: "16px",
     display: "flex",
     flexDirection: "column",
-    gap: "12px",
+    gap: "20px",
     scrollbarColor: "var(--colorNeutralForeground4) transparent",
     scrollbarWidth: "thin",
   },
@@ -46,18 +48,30 @@ const useStyles = makeStyles({
   },
   messageAssistant: {
     alignSelf: "flex-start",
-    backgroundColor: "var(--colorNeutralBackground1Hover)",
-    padding: "10px 14px",
-    borderRadius: "12px",
-    maxWidth: "70%",
+    maxWidth: "100%",
     wordWrap: "break-word",
+    display: "grid",
+    gridTemplateColumns: "24px 1fr",
+    gap: "8px",
+    alignItems: "start",
+    justifyItems: "center",
+    "& p:first-child": {
+      marginTop: 0,
+    },
+    "& p:last-child": {
+      marginBottom: 0,
+    },
   },
   messageTool: {
     alignSelf: "flex-start",
-    padding: "4px 0",
     fontSize: "12px",
     color: "var(--colorNeutralForeground3)",
     cursor: "pointer",
+    display: "grid",
+    gridTemplateColumns: "24px 1fr",
+    gap: "8px",
+    alignItems: "center",
+    justifyItems: "center",
   },
   toolArgs: {
     fontSize: "11px",
@@ -109,10 +123,18 @@ export const MessageList: React.FC<MessageListProps> = ({
         >
           {message.toolName ? (
             <>
-              🔧 {message.toolName}
-              {expandedTools.has(message.id) && (
-                <div className={styles.toolArgs}>{message.text}</div>
-              )}
+              <span style={{ marginTop: '0' }}>🔧</span>
+              <div style={{ justifySelf: 'start' }}>
+                {message.toolName}
+                {expandedTools.has(message.id) && (
+                  <div className={styles.toolArgs}>{message.text}</div>
+                )}
+              </div>
+            </>
+          ) : message.sender === "assistant" ? (
+            <>
+              <span style={{ color: '#8b5cf6', fontSize: '26px', lineHeight: '1', marginTop: '-5px' }}>●</span>
+              <div style={{ justifySelf: 'start' }}><Markdown remarkPlugins={[remarkGfm]}>{message.text}</Markdown></div>
             </>
           ) : message.text}
         </div>
@@ -120,7 +142,8 @@ export const MessageList: React.FC<MessageListProps> = ({
       
       {isTyping && (
         <div className={styles.messageAssistant}>
-          <span>Typing...</span>
+          <span style={{ color: '#8b5cf6', fontSize: '26px', lineHeight: '1', marginTop: '-5px' }}>●</span>
+          <span>Thinking...</span>
         </div>
       )}
       
