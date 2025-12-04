@@ -15,6 +15,7 @@ export interface Message {
 interface MessageListProps {
   messages: Message[];
   isTyping: boolean;
+  isConnecting?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -85,6 +86,7 @@ const useStyles = makeStyles({
 export const MessageList: React.FC<MessageListProps> = ({
   messages,
   isTyping,
+  isConnecting,
 }) => {
   const styles = useStyles();
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -105,9 +107,15 @@ export const MessageList: React.FC<MessageListProps> = ({
 
   return (
     <div className={styles.chatContainer}>
-      {messages.length === 0 && (
+      {messages.length === 0 && !isConnecting && (
         <div className={styles.emptyState}>
           What can I do for you?
+        </div>
+      )}
+
+      {isConnecting && (
+        <div className={styles.emptyState}>
+          Connecting...
         </div>
       )}
       

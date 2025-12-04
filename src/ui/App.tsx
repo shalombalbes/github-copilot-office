@@ -34,7 +34,7 @@ export const App: React.FC = () => {
     (async () => {
       try {
         const client = await createWebSocketClient(`wss://${location.host}/api/copilot`);
-        setSession(await client.createSession());
+        setSession(await client.createSession({ model: 'claude-haiku-4.5' }));
       } catch (e: any) {
         setError(`Failed to connect: ${e.message}`);
       }
@@ -96,6 +96,7 @@ export const App: React.FC = () => {
         <MessageList
           messages={messages}
           isTyping={isTyping}
+          isConnecting={!session && !error}
         />
 
         {error && <div style={{ color: 'red', padding: '8px' }}>{error}</div>}
