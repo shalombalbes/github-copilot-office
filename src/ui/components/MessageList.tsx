@@ -18,11 +18,13 @@ interface MessageListProps {
 const useStyles = makeStyles({
   chatContainer: {
     flex: 1,
-    overflowY: "auto",
+    overflowY: "scroll",
     padding: "16px",
     display: "flex",
     flexDirection: "column",
     gap: "12px",
+    scrollbarColor: "var(--colorNeutralForeground4) transparent",
+    scrollbarWidth: "thin",
   },
   emptyState: {
     display: "flex",
