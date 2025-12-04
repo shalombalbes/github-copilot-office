@@ -198,9 +198,11 @@ export class WebSocketCopilotClient {
         this.connection.onRequest(
             "tool.call",
             async (params: ToolCallRequestPayload): Promise<ToolCallResponsePayload> => {
+                console.log('[tool.call]', params.toolName, params.arguments);
                 const session = this.sessions.get(params.sessionId);
                 const handler = session?.getToolHandler(params.toolName);
                 if (!handler) {
+                    console.log('[tool.call] no handler for', params.toolName);
                     return {
                         result: {
                             textResultForLlm: `Tool '${params.toolName}' not supported`,
@@ -217,8 +219,10 @@ export class WebSocketCopilotClient {
                         toolName: params.toolName,
                         arguments: params.arguments,
                     });
+                    console.log('[tool.call] result', result);
                     return { result: typeof result === "string" ? result : result };
                 } catch (error) {
+                    console.log('[tool.call] error', error);
                     const message = error instanceof Error ? error.message : String(error);
                     return {
                         result: {

@@ -10,6 +10,7 @@ import { Message, MessageList } from "./components/MessageList";
 import { HeaderBar } from "./components/HeaderBar";
 import { useIsDarkMode } from "./useIsDarkMode";
 import { createWebSocketClient } from "../../copilot-sdk-nodejs/websocket-client";
+import { wordTools } from "./tools";
 import React from "react";
 
 const useStyles = makeStyles({
@@ -34,7 +35,10 @@ export const App: React.FC = () => {
     (async () => {
       try {
         const client = await createWebSocketClient(`wss://${location.host}/api/copilot`);
-        setSession(await client.createSession({ model: 'claude-haiku-4.5' }));
+        setSession(await client.createSession({ 
+          model: 'claude-haiku-4.5',
+          tools: wordTools,
+        }));
       } catch (e: any) {
         setError(`Failed to connect: ${e.message}`);
       }
@@ -57,6 +61,7 @@ export const App: React.FC = () => {
 
     try {
       for await (const event of session.query({ prompt: userInput })) {
+        console.log('[event]', event.type, event);
         if (event.type === 'assistant.message' && (event.data as any).content) {
           setMessages((prev) => [...prev, {
             id: event.id,
@@ -74,6 +79,7 @@ export const App: React.FC = () => {
           }]);
         }
       }
+      console.log('[query complete]');
     } catch (e: any) {
       setError(e.message || 'Unknown error');
     } finally {
