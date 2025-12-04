@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket Proxy Test</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+    #log { background: #1e1e1e; color: #d4d4d4; padding: 1rem; height: 400px; overflow-y: auto; font-family: monospace; font-size: 13px; border-radius: 4px; }
+    .sent { color: #4ec9b0; }
+    .received { color: #dcdcaa; }
+    .error { color: #f14c4c; }
+    .info { color: #808080; }
+    #input { width: 100%; padding: 0.5rem; font-family: monospace; font-size: 14px; box-sizing: border-box; margin-top: 1rem; }
+    button { padding: 0.5rem 1rem; margin-top: 0.5rem; margin-right: 0.5rem; cursor: pointer; }
+    #status { margin-bottom: 1rem; padding: 0.5rem; border-radius: 4px; }
+    .connected { background: #2d5a2d; color: white; }
+    .disconnected { background: #5a2d2d; color: white; }
+  </style>
+</head>
+<body>
+  <h1>WebSocket Proxy Test</h1>
+  <div id="status" class="disconnected">Disconnected</div>
+  <div id="log"></div>
+  <textarea id="input" rows="3" placeholder="Enter message to send..."></textarea>
+  <div>
+    <button onclick="send()">Send</button>
+    <button onclick="connect()">Connect</button>
+    <button onclick="disconnect()">Disconnect</button>
+    <button onclick="clearLog()">Clear Log</button>
+  </div>
+
+  <script>
+    let ws = null;
+    const log = document.getElementById('log');
+    const input = document.getElementById('input');
+    const status = document.getElementById('status');
+
+    function appendLog(msg, className) {
+      const line = document.createElement('div');
+      line.className = className;
+      line.textContent = `[${new Date().toISOString().slice(11, 23)}] ${msg}`;
+      log.appendChild(line);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function updateStatus(connected) {
+      status.textContent = connected ? 'Connected' : 'Disconnected';
+      status.className = connected ? 'connected' : 'disconnected';
+    }
+
+    function connect() {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        appendLog('Already connected', 'info');
+        return;
+      }
+
+      const url = `wss://${location.host}/api/copilot`;
+      appendLog(`Connecting to ${url}...`, 'info');
+      
+      ws = new WebSocket(url);
+      
+      ws.onopen = () => {
+        appendLog('Connected', 'info');
+        updateStatus(true);
+      };
+      
+      ws.onmessage = (e) => {
+        appendLog(`← ${e.data}`, 'received');
+      };
+      
+      ws.onerror = (e) => {
+        appendLog(`Error: ${e.message || 'WebSocket error'}`, 'error');
+      };
+      
+      ws.onclose = (e) => {
+        appendLog(`Disconnected (code: ${e.code}, reason: ${e.reason || 'none'})`, 'info');
+        updateStatus(false);
+        ws = null;
+      };
+    }
+
+    function disconnect() {
+      if (ws) {
+        ws.close();
+      }
+    }
+
+    function send() {
+      if (!ws || ws.readyState !== WebSocket.OPEN) {
+        appendLog('Not connected', 'error');
+        return;
+      }
+      const msg = input.value;
+      if (msg) {
+        ws.send(msg);
+        appendLog(`→ ${msg}`, 'sent');
+        input.value = '';
+      }
+    }
+
+    function clearLog() {
+      log.innerHTML = '';
+    }
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.ctrlKey) {
+        send();
+      }
+    });
+
+    // Auto-connect on load
+    connect();
+  </script>
+</body>
+</html>

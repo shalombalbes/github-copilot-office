@@ -2,6 +2,7 @@ const express = require('express');
 const https = require('https');
 const { createServer: createViteServer } = require('vite');
 const path = require('path');
+const { setupCopilotProxy } = require('./copilotProxy');
 
 async function createServer() {
   const app = express();
@@ -28,6 +29,9 @@ async function createServer() {
   
   const PORT = 3000;
   const httpsServer = https.createServer(httpsConfig, app);
+
+  // Setup WebSocket proxy for Copilot
+  setupCopilotProxy(httpsServer);
   
   const vite = await createViteServer({
     server: { 
