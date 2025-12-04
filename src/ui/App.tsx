@@ -88,6 +88,8 @@ export const App: React.FC = () => {
 
   const handleClearChat = () => {
     setMessages([]);
+    setInputValue("");
+    setIsTyping(false);
   };
 
   return (
@@ -104,7 +106,6 @@ export const App: React.FC = () => {
           value={inputValue}
           onChange={setInputValue}
           onSend={handleSend}
-          disabled={isTyping || !isInitialized}
         />
       </div>
     </FluentProvider>

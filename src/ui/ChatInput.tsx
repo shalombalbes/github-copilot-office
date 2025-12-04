@@ -49,16 +49,16 @@ export const ChatInput: React.FC<ChatInputProps> = ({
   value,
   onChange,
   onSend,
-  disabled = false,
 }) => {
   const styles = useStyles();
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    // Refocus when value becomes empty (after sending)
     if (value === "") {
-      setTimeout(() => inputRef.current?.focus(), 0);
+      setTimeout(() => inputRef.current?.focus(), 1000);
     }
-  }, [value]); // Refocus when value becomes empty (after sending)
+  }, [value]);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -77,14 +77,13 @@ export const ChatInput: React.FC<ChatInputProps> = ({
         onKeyDown={handleKeyPress}
         placeholder="Type a message..."
         rows={2}
-        disabled={disabled}
       />
       <Tooltip content="Send message" relationship="label">
         <Button
           appearance="primary"
           icon={<Send24Regular />}
           onClick={onSend}
-          disabled={disabled || !value.trim()}
+          disabled={!value.trim()}
           className={styles.sendButton}
         />
       </Tooltip>
