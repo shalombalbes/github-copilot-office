@@ -1,6 +1,17 @@
-$manifestPath = "$PSScriptRoot\manifest.xml"
+$appPath = "$PSScriptRoot\GitHub Copilot Office Add-in.exe"
+
+# Check if running from release (exe exists) or dev (manifest in root)
+if (Test-Path $appPath) {
+    # Release mode: certs and manifest are in resources subfolder
+    $manifestPath = "$PSScriptRoot\resources\manifest.xml"
+    $certPath = "$PSScriptRoot\resources\certs\localhost.pem"
+} else {
+    # Dev mode: certs and manifest are in the repo root
+    $manifestPath = "$PSScriptRoot\manifest.xml"
+    $certPath = "$PSScriptRoot\certs\localhost.pem"
+}
+
 $manifestFullPath = (Resolve-Path $manifestPath).Path
-$certPath = "$PSScriptRoot\certs\localhost.pem"
 
 Write-Host "Setting up Office Add-in for Windows..." -ForegroundColor Cyan
 Write-Host ""
