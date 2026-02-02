@@ -160,6 +160,7 @@ export class WebSocketCopilotClient {
         const response = await this.connection.sendRequest("session.create", {
             model: config.model,
             sessionId: config.sessionId,
+            systemMessage: config.systemMessage,
             tools: config.tools?.map((tool) => ({
                 name: tool.name,
                 description: tool.description,

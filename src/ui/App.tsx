@@ -56,7 +56,39 @@ export const App: React.FC = () => {
       const tools = getToolsForHost(host);
       const newClient = await createWebSocketClient(`wss://${location.host}/api/copilot`);
       setClient(newClient);
-      setSession(await newClient.createSession({ model, tools }));
+      
+      // Build host-specific system message
+      const hostName = host === Office.HostType.PowerPoint ? "PowerPoint" 
+        : host === Office.HostType.Word ? "Word" 
+        : host === Office.HostType.Excel ? "Excel" 
+        : "Office";
+      
+      const systemMessage = {
+        mode: "append" as const,
+        content: `You are an AI assistant embedded inside Microsoft ${hostName} as an Office Add-in. You have direct access to the open ${hostName} document through the tools provided.
+
+IMPORTANT: You are NOT a file system assistant. The user's document is already open in ${hostName}. Use your ${hostName} tools (like get_presentation_content, get_presentation_overview, get_slide_image, etc.) to read and modify the document directly. Do NOT search for files on disk or ask the user to provide file paths.
+
+${host === Office.HostType.PowerPoint ? `For PowerPoint:
+- Use get_presentation_overview first to see all slides and understand the deck structure
+- Use get_presentation_content to read slide text (supports ranges like startIndex/endIndex for large decks)
+- Use get_slide_image to capture a slide's visual design, colors, and layout
+- The presentation is already open - just call the tools directly` : ''}
+
+${host === Office.HostType.Word ? `For Word:
+- Use get_document_content to read the document
+- Use set_document_content to modify it
+- The document is already open - just call the tools directly` : ''}
+
+${host === Office.HostType.Excel ? `For Excel:
+- Use get_workbook_info to understand the workbook structure
+- Use get_workbook_content to read cell data
+- The workbook is already open - just call the tools directly` : ''}
+
+Always use your tools to interact with the document. Never ask users to save, export, or provide file paths.`
+      };
+      
+      setSession(await newClient.createSession({ model, tools, systemMessage }));
     } catch (e: any) {
       setError(`Failed to create session: ${e.message}`);
     }

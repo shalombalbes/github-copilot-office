@@ -110,7 +110,42 @@ const useStyles = makeStyles({
     alignItems: "center",
     gap: "4px",
   },
+  streamingIndicator: {
+    color: "var(--colorNeutralForeground3)",
+    fontStyle: "italic",
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
+  },
 });
+
+// Animated dots component for streaming indicator
+const StreamingDots: React.FC = () => {
+  return (
+    <>
+      <style>
+        {`
+          @keyframes pulse-dot {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+          }
+          .streaming-dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: var(--colorNeutralForeground3, #666);
+            animation: pulse-dot 1.4s ease-in-out infinite;
+          }
+        `}
+      </style>
+      <span style={{ display: 'inline-flex', gap: '3px', marginLeft: '2px' }}>
+        <span className="streaming-dot" style={{ animationDelay: '0s' }} />
+        <span className="streaming-dot" style={{ animationDelay: '0.2s' }} />
+        <span className="streaming-dot" style={{ animationDelay: '0.4s' }} />
+      </span>
+    </>
+  );
+};
 
 export const MessageList: React.FC<MessageListProps> = ({
   messages,
@@ -200,8 +235,9 @@ export const MessageList: React.FC<MessageListProps> = ({
             {streamingText ? (
               <Markdown remarkPlugins={[remarkGfm]}>{streamingText}</Markdown>
             ) : (
-              <span style={{ color: 'var(--colorNeutralForeground3)', fontStyle: 'italic' }}>
-                {currentActivity || "Thinking..."}
+              <span className={styles.streamingIndicator}>
+                {currentActivity || "Thinking"}
+                <StreamingDots />
               </span>
             )}
           </div>

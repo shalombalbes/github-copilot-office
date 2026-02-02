@@ -3,6 +3,8 @@ import { setDocumentContent } from "./setDocumentContent";
 import { getSelection } from "./getSelection";
 import { webFetch } from "./webFetch";
 import { getPresentationContent } from "./getPresentationContent";
+import { getPresentationOverview } from "./getPresentationOverview";
+import { getSlideImage } from "./getSlideImage";
 import { setPresentationContent } from "./setPresentationContent";
 import { addSlideFromCode } from "./addSlideFromCode";
 import { clearSlide } from "./clearSlide";
@@ -21,7 +23,9 @@ export const wordTools = [
 ];
 
 export const powerpointTools = [
+  getPresentationOverview,
   getPresentationContent,
+  getSlideImage,
   setPresentationContent,
   addSlideFromCode,
   clearSlide,
