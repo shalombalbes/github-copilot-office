@@ -88,6 +88,10 @@ const toolConfig: Record<string, { icon: string; format: (args: Record<string, u
       }
     },
   },
+  report_intent: {
+    icon: "💭",
+    format: (args) => args.intent as string || "Working",
+  },
 };
 
 function formatToolCall(toolName: string, args: Record<string, unknown>): { icon: string; description: string } {

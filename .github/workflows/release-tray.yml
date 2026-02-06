@@ -20,13 +20,9 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@github'
 
       - name: Install dependencies
         run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Package tray app
         run: npm run package:tray
@@ -51,13 +47,9 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@github'
 
       - name: Install dependencies
         run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Package tray app
         run: npm run package:tray
